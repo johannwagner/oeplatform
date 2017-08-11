@@ -1,0 +1,151 @@
+{% extends "dataedit/base.html" %}
+{% block title %} - {{ schema }} - Create Table{% endblock %}
+{% load staticfiles %}
+{% block data_content %}
+    <div class="panel">
+        <div class="panel-body">
+
+            <div id="tableNameDiv" class="form-group has-danger">
+                <label for="tableName">Table Name:</label>
+                <input class="form-control" id="tableName" type="text" name="tableName">
+
+                <small class="form-text text-muted">
+                    Your name should only contain lower case letters and underscores.
+                </small>
+                <small id="tableNameGuidelines" class="red-text" style="display: none;">
+                    Your table name offend our guidelines.
+                </small>
+            </div>
+
+            <hr>
+
+            <div class="row">
+                <form action="" method="POST"></form>
+
+                <div class="col-md-4">
+
+                    <p>
+                        Columns should contain an <strong>id</strong> column. We will add this column as primary key.
+                    </p>
+                    <hr>
+                    <div class="form-group">
+                        <label for="columnName">Column Name</label>
+                        <input class="form-control addColumnClear" id="columnName" name="columnName">
+                    </div>
+                    <div class="form-group">
+                        <label for="columnType">Column Type</label>
+                        <select class="form-control addColumnClear" id="columnType" name="columnType" onchange="lengthVisibility()">
+                            <option>BigInteger</option>
+                            <option>Boolean</option>
+                            <option>Date</option>
+                            <option>DateTime</option>
+                            <option>Enum</option>
+                            <option>Float</option>
+                            <option>Integer</option>
+                            <option>Interval</option>
+                            <option>LargeBinary</option>
+                            <option>Numeric</option>
+                            <option>PickleType</option>
+                            <option>SmallInteger</option>
+                            <option>String</option>
+                            <option>Text</option>
+                            <option>Time</option>
+                            <option>Unicode</option>
+                            <option>UnicodeText</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="display: none" id="columnLengthDiv">
+                        <label for="columnLength">Type Length</label>
+                        <input class="form-control addColumnClear" type="number" id="columnLength" name="columnLength">
+                    </div>
+
+                    <div class="form-group form-inline">
+                        <label class="form-check-label">
+                            <input class="form-check-input addColumnClear" id="columnNotNull" name="columnNotNull" type="checkbox"> Not
+                            Null
+                        </label>
+                        <button style="float:right; " class="btn btn-info" onclick="addColumn(); return false;">Add
+                            Column
+                        </button>
+                    </div>
+
+                    <hr>
+
+
+                </div>
+                <div class="col-md-4">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Data Type</th>
+                            <th>Length</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody id="tableRows">
+                        </tbody>
+                    </table>
+
+                    <hr>
+
+                    <div id="constraintAdditions">
+                        <div id="constraintSchemaNameDiv" class="form-group has-danger addConstraintClear">
+                            <label for="constraintSchemaName">Schema Name:</label>
+                            <input class="form-control" id="constraintSchemaName" type="text" name="tableName">
+                        </div>
+                        <div id="constraintTableNameDiv" class="form-group has-danger addConstraintClear">
+                            <label for="constraintTableName">Table Name:</label>
+                            <input class="form-control" id="constraintTableName" type="text" name="tableName">
+                        </div>
+                        <div id="constraintColumnNamesDiv" class="form-group has-danger addConstraintClear">
+                            <label for="constraintColumnNames">Column Names:</label>
+                            <input class="form-control" id="constraintColumnNames" type="text" name="tableName">
+                        </div>
+                    </div>
+
+                     <hr>
+
+                    <button class="btn btn-info" onclick="addUniqueConstraint(); return false;">Add Unique Constraint
+                    </button>
+                    <button class="btn btn-info" onclick="addForeignKeyConstraint(); return false;">Add Foreign Key Constraint
+                    </button>
+
+
+
+
+                </div>
+                <div class="col-md-4">
+
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Columns</th>
+                            <th>Additional Information</th>
+                            <th></th>
+
+                        </tr>
+                        </thead>
+                        <tbody id="tableRowsConstraints">
+                        </tbody>
+                    </table>
+                </div>
+                <hr>
+                </form>
+            </div>
+
+
+            <div class="row col-md-12 form-group">
+                {% csrf_token %}
+                <input type="submit" onclick="createTableOnServer()" class="btn btn-success" id="submitButton" value="Create Table">
+                <a href="../{{ schema }}" class="btn btn-warning">Discard</a>
+            </div>
+        </div>
+
+
+    </div>
+    <script src="{% static 'dataedit/createTable.js' %}"></script>
+
+
+{% endblock %}
