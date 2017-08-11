@@ -977,3 +977,7 @@ class SearchView(View):
         return render(request, 'dataedit/search.html',
                       {'results': ret, 'tags': get_all_tags(),
                        'selected': filter_tags})
+
+
+def createtable(request, schema):
+    return render(request, 'dataedit/dataedit_createtable.html')

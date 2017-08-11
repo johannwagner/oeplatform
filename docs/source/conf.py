@@ -17,7 +17,8 @@ import os
 import shlex
 
 import sys
-from unittest.mock import MagicMock
+# from unittest.mock import MagicMock
+from mock import MagicMock
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -315,5 +316,9 @@ class Mock(MagicMock):
         else:
             return Mock()
 
+
 MOCK_MODULES = ['shapely']
 sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
+
+
+sys.path.append(os.path.join(os.path.dirname(__name__), '..'))

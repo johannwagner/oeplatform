@@ -94,3 +94,7 @@ input[type="checkbox"]:checked+label{
     background:#FCFCFD;
     border: 2px solid #C5C5CF;
 }
+
+.buttonContainer {
+    padding: 5px;
+}

@@ -11,6 +11,7 @@ urlpatterns = [
     url(r'^admin/constraints/', views.admin_constraints, name='input'),
     url(r'^view/$', views.listschemas, name='index'),
     url(r'^view/(?P<schema_name>{qual})$'.format(qual=pgsql_qualifier), views.listtables, name='input'),
+    url(r'^view/(?P<schema>{qual})/createTable$'.format(qual=pgsql_qualifier), views.createtable, name='input'),
     url(r'^view/(?P<schema>{qual})/(?P<table>{qual})$'.format(qual=pgsql_qualifier), views.DataView.as_view(), name='input'),
     url(r'^tags/add/$'.format(qual=pgsql_qualifier), views.add_table_tags),
     url(r'^view/(?P<schema>{qual})/(?P<table>{qual})/download$'.format(qual=pgsql_qualifier), views.RevisionView.as_view(), name='input'),
