@@ -144,15 +144,17 @@ class Table(APIView):
         :param request:
         :return:
         """
+        """
         if schema not in ['model_draft', 'sandbox', 'test']:
             raise PermissionDenied
         if schema.startswith('_'):
             raise PermissionDenied
         if request.user.is_anonymous():
             raise PermissionDenied
+        """
         if actions.has_table(dict(schema=schema, table=table),{}):
             raise APIError('Table already exists')
-        json_data = request.data['query']
+        json_data = request.data
         constraint_definitions = []
         column_definitions = []
 

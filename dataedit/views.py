@@ -980,4 +980,4 @@ class SearchView(View):
 
 
 def createtable(request, schema):
-    return render(request, 'dataedit/dataedit_createtable.html')
+    return render(request, 'dataedit/dataedit_createtable.html', {'schema': schema})

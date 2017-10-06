@@ -2,6 +2,7 @@ let columnCount = 0;
 let columnList = [];
 let constraintCount = 0;
 let constraintList = [];
+let schema;
 
 function removeColumn(columnId){
     columnList[columnId] = null;
@@ -41,6 +42,11 @@ function addForeignKeyConstraint(){
     renderColumns();
 }
 
+function setSchema(_schema) {
+    console.log('Set Schema', _schema);
+    schema = _schema;
+}
+
 function addUniqueConstraint(){
     let selectedColumns = columnList.filter((column) => column && column.selected).map((column) => column.name);
     constraintCount++;
@@ -70,6 +76,7 @@ function lengthVisibility(columnCount) {
     }
 
 }
+
 function addColumn() {
     columnCount++;
 
@@ -193,8 +200,8 @@ function pushToServer(){
     let constraints = [];
     let columns = [];
 
-    let schemaName ="";
-    let tableName = "";
+    let schemaName = schema;
+    let tableName = document.getElementById('tableName').value;
 
     columnList.forEach((column) => {
         let columnData = {
@@ -208,6 +215,14 @@ function pushToServer(){
     });
 
     constraintList.forEach((constraint) => {
+
+        if(constraint.columns.length > 1) {
+            /**
+             * API is not able to handle multi column constraints.
+             */
+            throw Error('Not supported.');
+        }
+
         if (constraint.type === "Unique"){
             constraints.push({
                 constraint_type: "UNIQUE",
@@ -216,16 +231,30 @@ function pushToServer(){
             });
         } else if(constraint.type === "ForeignKey") {
             constraints.push({
-              constraint_type: "FOREIGN KEY",
-              constraint_name: `fkey_${schemaName}_${tableName}_${constraint.columns.join('_')}`,
-              constraint_parameter: constraint.columns.join(', '),
-              reference_table: "example.table",
-              reference_column: "database_id_ref"
+                constraint_type: "FOREIGN KEY",
+                constraint_name: `fkey_${schemaName}_${tableName}_${constraint.columns.join('_')}`,
+                constraint_parameter: constraint.columns.join(', '),
+                reference_table: constraint.reference.schemaName + '.' + constraint.reference.tableName,
+                reference_column: constraint.reference.columnNames.join(', ')
             })
         }
 
     }
     )
+    debugger;
+    $.ajax({
+        type: 'PUT',
+        url: `/api/v0/schema/${schemaName}/tables/${tableName}/`,
+        data: JSON.stringify({
+            columns,
+            constraints
+        }), // or JSON.stringify ({name: 'jonas'}),
+        success: function(data) { alert('data: ' + data); },
+        contentType: "application/json",
+        dataType: 'json'
+    });
+
+
 
     /*
     {
