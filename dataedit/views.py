@@ -979,5 +979,6 @@ class SearchView(View):
                        'selected': filter_tags})
 
 
+@login_required
 def createtable(request, schema):
     return render(request, 'dataedit/dataedit_createtable.html', {'schema': schema})
